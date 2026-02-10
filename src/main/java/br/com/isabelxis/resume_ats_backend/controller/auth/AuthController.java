@@ -10,6 +10,7 @@ import br.com.isabelxis.resume_ats_backend.dto.user.AuthResponseDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.LoginRequestDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.RegisterRequestDTO;
 import br.com.isabelxis.resume_ats_backend.service.auth.AuthService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 
@@ -26,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public AuthResponseDTO login(@RequestBody LoginRequestDTO request) {
+    public AuthResponseDTO login(@Valid @RequestBody LoginRequestDTO request) {
         return authService.login(request);
     }
 
