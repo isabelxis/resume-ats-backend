@@ -22,7 +22,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public AuthResponseDTO register(@RequestBody RegisterRequestDTO request) {
+    public AuthResponseDTO register(@Valid @RequestBody RegisterRequestDTO request) {
         return authService.register(request);
     }
 
