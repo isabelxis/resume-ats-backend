@@ -1,18 +1,26 @@
 package br.com.isabelxis.resume_ats_backend.service.auth;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties.Apiversion.Use;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.isabelxis.resume_ats_backend.dto.user.AuthResponseDTO;
+import br.com.isabelxis.resume_ats_backend.dto.user.ForgotPasswordRequestDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.LoginRequestDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.RegisterRequestDTO;
+import br.com.isabelxis.resume_ats_backend.dto.user.ResetPasswordRequestDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.UserResponseDTO;
+import br.com.isabelxis.resume_ats_backend.entity.user.PasswordResetToken;
 import br.com.isabelxis.resume_ats_backend.entity.user.Plan;
 import br.com.isabelxis.resume_ats_backend.entity.user.User;
 import br.com.isabelxis.resume_ats_backend.infra.exception.EmailAlreadyExistsException;
 import br.com.isabelxis.resume_ats_backend.infra.exception.InvalidPasswordException;
+import br.com.isabelxis.resume_ats_backend.infra.exception.InvalidResetTokenException;
 import br.com.isabelxis.resume_ats_backend.infra.exception.UserNotFoundException;
+import br.com.isabelxis.resume_ats_backend.repository.user.PasswordResetTokenRepository;
 import br.com.isabelxis.resume_ats_backend.repository.user.UserRepository;
 import br.com.isabelxis.resume_ats_backend.service.jwt.JwtService;
 import lombok.AllArgsConstructor;
@@ -24,6 +32,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordResetTokenRepository tokenRepository;
+    private final EmailService emailService;
 
     public AuthResponseDTO register(RegisterRequestDTO request) {
         if (userRepository.existsByEmail(request.email())) {
@@ -31,6 +41,7 @@ public class AuthService {
         }
 
         User user = new User();
+        user.setName(request.name());
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setPlan(Plan.FREE);
@@ -39,7 +50,7 @@ public class AuthService {
         String token = jwtService.generateToken(user);
         return new AuthResponseDTO(
             token,
-            new UserResponseDTO(user.getId(), user.getEmail(), user.getPlan().name()));
+            new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getPlan().name()));
     }
 
     public AuthResponseDTO login(LoginRequestDTO request) {
@@ -56,10 +67,46 @@ public class AuthService {
             token,
             new UserResponseDTO(
                 user.getId(), 
+                user.getName(),
                 user.getEmail(),
                 user.getPlan().name()
             )
         );
     }
 
+    public void forgotPassword(String email) {
+        userRepository.findByEmail(email).ifPresent(user ->{
+
+            String token = UUID.randomUUID().toString();
+
+            PasswordResetToken resetToken = new PasswordResetToken();
+                resetToken.setToken(token);
+                resetToken.setUser(user);
+                resetToken.setExpiresAt(LocalDateTime.now().plusMinutes(15));
+                resetToken.setUsed(false);               
+            
+                tokenRepository.save(resetToken);
+
+                emailService.sendPasswordResetEmail(user.getEmail(), token);
+        }
+        );
+    }
+
+    public void resetPassword(ResetPasswordRequestDTO request) {
+
+        PasswordResetToken resetToken = tokenRepository
+                .findByTokenAndUsedFalse(request.token())
+                .orElseThrow(() -> new InvalidResetTokenException("Token inválido ou já utilizado"));
+
+        if (resetToken.getExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new InvalidResetTokenException("Token expirado ou já utilizado");
+        }
+
+        User user = resetToken.getUser();
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(user);
+
+        resetToken.setUsed(true);
+        tokenRepository.save(resetToken);
+    }
 }

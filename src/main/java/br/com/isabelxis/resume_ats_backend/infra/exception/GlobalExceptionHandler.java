@@ -76,4 +76,14 @@ public class GlobalExceptionHandler {
                 "message", "Erro interno no servidor"
             ));
     }
+
+    @ExceptionHandler(InvalidResetTokenException.class)
+    public ResponseEntity<?> handleInvalidResetToken(InvalidResetTokenException ex) {
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(Map.of(
+            "status", 400,
+            "message", ex.getMessage()
+        ));
+    }
 }
