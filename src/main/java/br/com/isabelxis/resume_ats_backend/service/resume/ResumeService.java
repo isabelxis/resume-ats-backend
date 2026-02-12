@@ -1,22 +1,14 @@
 package br.com.isabelxis.resume_ats_backend.service.resume;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import br.com.isabelxis.resume_ats_backend.dto.resume.SkillGroupDTO;
+import br.com.isabelxis.resume_ats_backend.dto.resume.ListResumeDTO;
 import br.com.isabelxis.resume_ats_backend.dto.resume.UpdateBasicDTO;
-import br.com.isabelxis.resume_ats_backend.entity.resume.Experience;
 import br.com.isabelxis.resume_ats_backend.entity.resume.Resume;
-import br.com.isabelxis.resume_ats_backend.entity.resume.SkillType;
-import br.com.isabelxis.resume_ats_backend.entity.resume.SkillTypeList;
-import br.com.isabelxis.resume_ats_backend.entity.resume.Skills;
 import br.com.isabelxis.resume_ats_backend.entity.user.User;
 import br.com.isabelxis.resume_ats_backend.repository.resume.ResumeRepository;
-import br.com.isabelxis.resume_ats_backend.repository.resume.SkillTypeRepository;
-import br.com.isabelxis.resume_ats_backend.repository.resume.SkillsRepository;
 import br.com.isabelxis.resume_ats_backend.repository.user.UserRepository;
 
 import lombok.AllArgsConstructor;
@@ -27,10 +19,8 @@ public class ResumeService {
 
     private ResumeRepository resumeRepository;
     private UserRepository userRepository;
-    private SkillsRepository skillRepository;
-    private SkillTypeRepository skillTypeRepository;
 
-    public Resume create(String email) {
+    public ListResumeDTO create(String email) {
         
         User user = userRepository.findByEmail(email)
             .orElseThrow();
@@ -38,102 +28,51 @@ public class ResumeService {
         Resume resume = new Resume();
         resume.setUser(user);
         
-        return resumeRepository.save(resume);
+        Resume saved = resumeRepository.save(resume);
+        return mapToDTO(saved);
     }
 
-    public Resume updateBasic(Long id, UpdateBasicDTO dto, String email) {
+    public List<ListResumeDTO> list(String email) {
+        List<Resume> resumes = 
+            resumeRepository.findByUserEmailOrderByCreatedAtDesc(email);
+        
+        return resumes.stream()
+            .map(r -> new ListResumeDTO(
+                r.getId(), 
+                r.getTitle(),
+                r.getStatus(), 
+                r.getCreatedAt()))
+            .toList();
+    }
+
+    public ListResumeDTO update(Long id, UpdateBasicDTO dto, String email) {
 
         Resume resume = resumeRepository
             .findByIdAndUserEmail(id, email)
-            .orElseThrow(() -> new RuntimeException("Acesso Negado ou Curriculo não encontrado"));
+            .orElseThrow(() -> new RuntimeException("Curriculo não encontrado ou acesso negado"));
 
 
         resume.setTitle(dto.title());
         resume.setSummary(dto.summary());
 
-        return resumeRepository.save(resume);
+        Resume updated = resumeRepository.save(resume);
+        return mapToDTO(updated);
     }
 
-    //incluir experiencias
-    public Resume updateExperiences(Long id, List<String> experiences, String email) {
-
+    public void delete(Long id, String email) {
         Resume resume = resumeRepository
             .findByIdAndUserEmail(id, email)
-            .orElseThrow(() -> new RuntimeException("Acesso Negado ou Curriculo não encontrado"));
+            .orElseThrow(() -> new RuntimeException("Curriculo não encontrado ou acesso negado"));
 
-        List<Experience> experienceList = experiences.stream()
-            .map(exp -> {
-                Experience experience = new Experience();
-                experience.setDescription(exp);
-                return experience;
-            })
-            .collect(Collectors.toList());
-        
-        resume.setExperiences(experienceList);
-
-        return resumeRepository.save(resume);
+        resumeRepository.delete(resume);
     }
 
-    public Skills addSkillToResume(
-        Long resumeId, 
-        String skillName, 
-        SkillTypeList type, 
-        String email
-    ){
-
-        Resume resume = resumeRepository
-            .findByIdAndUserEmail(resumeId, email)
-            .orElseThrow(() -> new RuntimeException("Acesso Negado ou Curriculo não encontrado"));
-
-        SkillType skillType = skillTypeRepository
-            .findByNameIgnoreCase(skillName)
-            .orElseGet(() -> {
-                SkillType newSkill = new SkillType();
-                newSkill.setName(skillName);
-                newSkill.setType(type);
-                return skillTypeRepository.save(newSkill);
-            });
-
-        Skills skills = new Skills();
-        skills.setResume(resume);
-        skills.setSkillType(skillType);
-
-        return skillRepository.save(skills);
-    }
-
-    public List<SkillGroupDTO> getSkillsGroupedByType(Long resumeId, String email) {
-
-        Resume resume = resumeRepository
-            .findByIdAndUserEmail(resumeId, email)
-            .orElseThrow(() -> new RuntimeException("Acesso Negado ou Curriculo não encontrado"));
-
-        List<Skills> skills = skillRepository.findByResumeId(resumeId)
-            .orElseThrow(() -> new RuntimeException("Nenhuma habilidade encontrada para este currículo"));
-
-        Map<SkillTypeList, List<String>> grouped = 
-            skills.stream()
-                .collect(Collectors.groupingBy(
-                    s -> s.getSkillType().getType(), 
-                    Collectors.mapping(s -> s.getSkillType().getName(), Collectors.toList())
-            ));
-        return grouped.entrySet()
-            .stream()
-            .map(entry -> new SkillGroupDTO(
-                formatCategory(entry.getKey()),
-                entry.getValue()
-            ))
-            .toList();
-    }
-
-    private String formatCategory(SkillTypeList type) {
-        return switch (type) {
-            case LANGUAGE -> "Languages";
-            case FRAMEWORK -> "Frameworks";
-            case DATABASE -> "Databases";
-            case PROGRAMMING -> "Programming Languages";
-            case API -> "APIs";
-            case AGILE -> "Agile Methodologies";
-            case TOOL -> "Tools";
-        };
+    private ListResumeDTO mapToDTO(Resume resume) {
+        return new ListResumeDTO(
+            resume.getId(),
+            resume.getTitle(),
+            resume.getStatus(),
+            resume.getCreatedAt()
+        );
     }
 }

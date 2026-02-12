@@ -15,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,7 +41,15 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Plan plan = Plan.FREE;
+
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    private String phone;
+    private String linkedin;
+    private String github;
+    private String portfolio;
+
+
 
     @Override
     public String getUsername() {

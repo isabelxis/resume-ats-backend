@@ -1,5 +1,6 @@
 package br.com.isabelxis.resume_ats_backend.entity.resume;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,11 +24,18 @@ public class Experience {
 
     private String company;
     private String position;
+
+    @Column(length = 2000)
     private String description;
+
     private String startDate;
     private String endDate;
     private String skills;
     private String models; //REMOTE, HYBRID, ONSITE
+
+    private Integer displayOrder = 0;
+    
+    private Boolean current = false;
 
     @ManyToOne
     @JoinColumn(name = "resume_id")

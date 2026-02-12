@@ -3,6 +3,7 @@ package br.com.isabelxis.resume_ats_backend.entity.resume;
 import java.time.LocalDate;
 import java.util.List;
 
+import br.com.isabelxis.resume_ats_backend.dto.resume.ListExperienceDTO;
 import br.com.isabelxis.resume_ats_backend.entity.user.User;
 
 import jakarta.persistence.CascadeType;
@@ -35,7 +36,7 @@ public class Resume {
 
     private String summary;
 
-    private String status = "DRAFT "; // DRAFT/COMPLETE/PUBLISHED/ARCHIVED
+    private String status = "DRAFT"; // DRAFT/COMPLETE/PUBLISHED/ARCHIVED
 
     private LocalDate createdAt = LocalDate.now();
 
@@ -44,7 +45,7 @@ public class Resume {
     private User user;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Experience> experiences;
+    private List<ListExperienceDTO> experiences;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Education> educations;
