@@ -1,14 +1,19 @@
 package br.com.isabelxis.resume_ats_backend.dto.resume;
 
+import java.util.List;
+
+import br.com.isabelxis.resume_ats_backend.dto.user.ProfileDTO;
+
 public record FullResumeDTO(
+    Long id,
     String title,
     String summary,
-    String Experiences,
-    String Educations,  
-    String Skills,
-    String Certifications,
-    String Languages,
-    String Projects
+
+    ProfileDTO profile,
+
+    List<ListExperienceDTO> experiences
+
+   // List<ListEducationDTO> education
 ) {
     
 

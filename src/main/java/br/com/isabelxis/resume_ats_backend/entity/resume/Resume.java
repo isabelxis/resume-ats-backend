@@ -45,7 +45,7 @@ public class Resume {
     private User user;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ListExperienceDTO> experiences;
+    private List<Experience> experiences;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Education> educations;

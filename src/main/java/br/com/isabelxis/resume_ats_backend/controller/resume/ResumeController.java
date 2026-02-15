@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.isabelxis.resume_ats_backend.dto.resume.FullResumeDTO;
 import br.com.isabelxis.resume_ats_backend.dto.resume.ListResumeDTO;
 import br.com.isabelxis.resume_ats_backend.dto.resume.UpdateBasicDTO;
-import br.com.isabelxis.resume_ats_backend.entity.resume.Resume;
 import br.com.isabelxis.resume_ats_backend.service.resume.ResumeService;
 
 import lombok.RequiredArgsConstructor;
@@ -41,17 +41,17 @@ public class ResumeController {
             );
     }
 
-    /*@GetMapping("/{id}")
-    public ResponseEntity<Resume> get(
+    @GetMapping("/{id}")
+    public ResponseEntity<FullResumeDTO> get(
         @PathVariable
         Long id,
 
         Authentication auth
     ) {
         return ResponseEntity.ok(
-                resumeService.get(id, auth.getName())
+                resumeService.getById(id, auth.getName())
             );
-    }*/
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<ListResumeDTO> update( 

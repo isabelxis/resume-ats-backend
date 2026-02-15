@@ -4,10 +4,15 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import br.com.isabelxis.resume_ats_backend.dto.resume.FullResumeDTO;
+import br.com.isabelxis.resume_ats_backend.dto.resume.ListExperienceDTO;
 import br.com.isabelxis.resume_ats_backend.dto.resume.ListResumeDTO;
 import br.com.isabelxis.resume_ats_backend.dto.resume.UpdateBasicDTO;
+import br.com.isabelxis.resume_ats_backend.dto.user.ProfileDTO;
+import br.com.isabelxis.resume_ats_backend.entity.resume.Experience;
 import br.com.isabelxis.resume_ats_backend.entity.resume.Resume;
 import br.com.isabelxis.resume_ats_backend.entity.user.User;
+import br.com.isabelxis.resume_ats_backend.repository.resume.ExperienceRepository;
 import br.com.isabelxis.resume_ats_backend.repository.resume.ResumeRepository;
 import br.com.isabelxis.resume_ats_backend.repository.user.UserRepository;
 
@@ -19,6 +24,7 @@ public class ResumeService {
 
     private ResumeRepository resumeRepository;
     private UserRepository userRepository;
+    private ExperienceRepository experienceRepository;
 
     public ListResumeDTO create(String email) {
         
@@ -43,6 +49,37 @@ public class ResumeService {
                 r.getStatus(), 
                 r.getCreatedAt()))
             .toList();
+    }
+
+    public FullResumeDTO getById(Long id, String email) {
+        Resume resume = resumeRepository
+            .findByIdAndUserEmail(id, email)
+            .orElseThrow(() -> new RuntimeException("Curriculo não encontrado ou acesso negado"));
+
+        ProfileDTO profileDTO = new ProfileDTO(
+            resume.getUser().getId(),
+            resume.getUser().getName(),
+            resume.getUser().getEmail(),
+            resume.getUser().getPhone(),
+            resume.getUser().getLinkedin(),
+            resume.getUser().getGithub(),
+            resume.getUser().getPortfolio()
+        );
+
+        List<ListExperienceDTO> experiences = 
+            experienceRepository
+                .findByResumeIdAndResumeUserEmailOrderByDisplayOrderDesc(id, email)
+                .stream()
+                .map(this::mapExperienceToDTO)
+                .toList();                                        
+
+        return new FullResumeDTO(
+            resume.getId(),
+            resume.getTitle(),
+            resume.getSummary(),
+            profileDTO,
+            experiences
+        );
     }
 
     public ListResumeDTO update(Long id, UpdateBasicDTO dto, String email) {
@@ -73,6 +110,20 @@ public class ResumeService {
             resume.getTitle(),
             resume.getStatus(),
             resume.getCreatedAt()
+        );
+    }
+
+    private ListExperienceDTO mapExperienceToDTO(Experience e) {
+        return new ListExperienceDTO(
+            e.getId(),
+            e.getCompany(),
+            e.getPosition(),
+            e.getDescription(),
+            e.getStartDate(),
+            e.getEndDate(),
+            e.getSkills(),
+            e.getModels(),
+            e.getCurrent()
         );
     }
 }
