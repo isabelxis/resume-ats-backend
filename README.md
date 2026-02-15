@@ -101,7 +101,34 @@ PUT http://localhost:8080/api/resumes/{id}/experiences/{id_experience}
 ````
 DELETE http://localhost:8080/api/resumes/{id}/experiences/{id_experience}
 
-- CRUD Educação
+- CRUD Educação ✔
+
+POST http://localhost:8080/api/resumes/{id}/educations
+````
+{
+ 	"institution": "Havard University",
+	"degree": "Bacharelor",
+	"startDate": "2009-06",
+  "endDate": "2014-12",
+ 	"GPA": "8.0/10.0",
+  "skills": ""
+}
+````
+GET http://localhost:8080/api/resumes/{id}/educations
+GET http://localhost:8080/api/resumes/{id}/educations/{id_education}
+PUT http://localhost:8080/api/resumes/{id}/educations/{id_education}
+````
+{
+ 	"institution": "Havard University",
+	"degree": "Bacharelor",
+	"startDate": "2009-06",
+  "endDate": "2014-12",
+ 	"GPA": "8.0/10.0",
+  "skills": ""
+}
+````
+DELETE http://localhost:8080/api/resumes/{id}/educations/{id_educations}
+
 - CRUD Projeto
 - CRUD Skill
 
