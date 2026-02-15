@@ -1,6 +1,7 @@
-package br.com.isabelxis.resume_ats_backend.dto.resume;
+package br.com.isabelxis.resume_ats_backend.dto.resume.education;
 
-public record CreateEducationDTO(
+public record ListEducationDTO(
+    Long id,
     String institution,
     String degree,
     String startDate,

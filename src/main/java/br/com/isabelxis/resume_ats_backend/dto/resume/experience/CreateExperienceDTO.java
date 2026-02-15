@@ -1,7 +1,6 @@
-package br.com.isabelxis.resume_ats_backend.dto.resume;
+package br.com.isabelxis.resume_ats_backend.dto.resume.experience;
 
-public record ListExperienceDTO(
-    Long id,
+public record CreateExperienceDTO(
     String company,
     String position,
     String description,

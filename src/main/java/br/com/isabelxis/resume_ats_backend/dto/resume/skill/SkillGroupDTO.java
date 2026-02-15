@@ -1,4 +1,4 @@
-package br.com.isabelxis.resume_ats_backend.dto.resume;
+package br.com.isabelxis.resume_ats_backend.dto.resume.skill;
 
 import java.util.List;
 
