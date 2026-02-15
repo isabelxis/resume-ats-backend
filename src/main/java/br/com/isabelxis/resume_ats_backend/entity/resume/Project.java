@@ -12,10 +12,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "personal_projects")
+@Table(name = "projects")
 @Getter
 @Setter
-public class Projects {
+public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Projects {
     private String name;
     private String description;
     private String link;
-    private String skills;
+    private String technologies;
     
     @ManyToOne
     @JoinColumn(name = "resume_id")
