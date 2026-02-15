@@ -3,12 +3,10 @@ package br.com.isabelxis.resume_ats_backend.service.auth;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties.Apiversion.Use;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.isabelxis.resume_ats_backend.dto.user.AuthResponseDTO;
-import br.com.isabelxis.resume_ats_backend.dto.user.ForgotPasswordRequestDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.LoginRequestDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.RegisterRequestDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.ResetPasswordRequestDTO;

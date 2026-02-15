@@ -49,8 +49,29 @@
 
 2. Preenchimento do currículo (wizard)
 
-- CRUD Currículo
+- CRUD Currículo ✔
+POST http://localhost:8080/api/resumes
+````
+{
+  "title": "Fullstack Developer",
+	"summary": "Backend and Frontend developer with 5+ years experience in Java, Spring Boot and React"
+}
+````
+GET http://localhost:8080/api/resumes
+GET http://localhost:8080/api/resumes/{id}
+
+PUT http://localhost:8080/api/resumes/{id}
+````
+{
+  "title": "Fullstack Developer",
+	"summary": "Backend and Frontend developer with 5+ years experience in Java, Spring Boot and React"
+}
+````
+DELETE http://localhost:8080/api/resumes/{id}
+
 - CRUD Experiência ✔
+
+POST http://localhost:8080/api/resumes/{id}/experiences
 ````
 {
   "company": "Teste Company",
@@ -63,6 +84,22 @@
   "current": true
 }
 ````
+GET http://localhost:8080/api/resumes/{id}/experiences
+GET http://localhost:8080/api/resumes/{id}/experiences/{id_experience}
+PUT http://localhost:8080/api/resumes/{id}/experiences/{id_experience}
+````
+{
+  "company": "Teste Company",
+  "position": "Fullstack Developer",
+  "description": "Desenvolvimento usando Angular e Spring Boot",
+  "startDate": "2021-01",
+  "endDate": "",
+	"skills": null,
+	"models": "ON SITE",
+  "current": true
+}
+````
+DELETE http://localhost:8080/api/resumes/{id}/experiences/{id_experience}
 
 - CRUD Educação
 - CRUD Projeto

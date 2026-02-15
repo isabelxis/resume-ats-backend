@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public record ListResumeDTO(
     Long id,
     String title,
+    String summary,
     String status,
     LocalDate createdAt
     

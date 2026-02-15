@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import br.com.isabelxis.resume_ats_backend.dto.resume.CreateResumeDTO;
 import br.com.isabelxis.resume_ats_backend.dto.resume.FullResumeDTO;
 import br.com.isabelxis.resume_ats_backend.dto.resume.ListExperienceDTO;
 import br.com.isabelxis.resume_ats_backend.dto.resume.ListResumeDTO;
-import br.com.isabelxis.resume_ats_backend.dto.resume.UpdateBasicDTO;
+import br.com.isabelxis.resume_ats_backend.dto.resume.UpdateResumeDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.ProfileDTO;
 import br.com.isabelxis.resume_ats_backend.entity.resume.Experience;
 import br.com.isabelxis.resume_ats_backend.entity.resume.Resume;
@@ -26,13 +27,18 @@ public class ResumeService {
     private UserRepository userRepository;
     private ExperienceRepository experienceRepository;
 
-    public ListResumeDTO create(String email) {
+    public ListResumeDTO create(
+        String email,
+        CreateResumeDTO dto
+        ) {
         
         User user = userRepository.findByEmail(email)
             .orElseThrow();
 
         Resume resume = new Resume();
         resume.setUser(user);
+        resume.setTitle(dto.title());
+        resume.setSummary(dto.summary());
         
         Resume saved = resumeRepository.save(resume);
         return mapToDTO(saved);
@@ -46,6 +52,7 @@ public class ResumeService {
             .map(r -> new ListResumeDTO(
                 r.getId(), 
                 r.getTitle(),
+                r.getSummary(),
                 r.getStatus(), 
                 r.getCreatedAt()))
             .toList();
@@ -82,7 +89,7 @@ public class ResumeService {
         );
     }
 
-    public ListResumeDTO update(Long id, UpdateBasicDTO dto, String email) {
+    public ListResumeDTO update(Long id, UpdateResumeDTO dto, String email) {
 
         Resume resume = resumeRepository
             .findByIdAndUserEmail(id, email)
@@ -108,6 +115,7 @@ public class ResumeService {
         return new ListResumeDTO(
             resume.getId(),
             resume.getTitle(),
+            resume.getSummary(),
             resume.getStatus(),
             resume.getCreatedAt()
         );
