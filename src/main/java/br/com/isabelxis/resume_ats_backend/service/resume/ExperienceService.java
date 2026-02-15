@@ -9,6 +9,7 @@ import br.com.isabelxis.resume_ats_backend.dto.resume.ListExperienceDTO;
 import br.com.isabelxis.resume_ats_backend.dto.resume.UpdateExperienceDTO;
 import br.com.isabelxis.resume_ats_backend.entity.resume.Experience;
 import br.com.isabelxis.resume_ats_backend.entity.resume.Resume;
+import br.com.isabelxis.resume_ats_backend.infra.exception.resume.ResourceNotFoundException;
 import br.com.isabelxis.resume_ats_backend.repository.resume.ExperienceRepository;
 import br.com.isabelxis.resume_ats_backend.repository.resume.ResumeRepository;
 
@@ -30,7 +31,7 @@ public class ExperienceService {
 
         Resume resume = resumeRepository
             .findByIdAndUserEmail(resumeId, email)
-            .orElseThrow(() -> new RuntimeException("Acesso Negado ou Curriculo não encontrado"));
+            .orElseThrow(() -> new ResourceNotFoundException("Curriculo"));
 
         Experience experience = new Experience();
         experience.setCompany(dto.company());
@@ -52,7 +53,7 @@ public class ExperienceService {
 
         Resume resume = resumeRepository
             .findByIdAndUserEmail(resumeId, email)
-            .orElseThrow(() -> new RuntimeException("Acesso Negado ou Curriculo não encontrado"));
+            .orElseThrow(() -> new ResourceNotFoundException("Curriculo"));
 
         List<Experience> experiences = experienceRepository
             .findByResumeId(resume.getId());
@@ -80,7 +81,7 @@ public class ExperienceService {
 
         Experience experience = experienceRepository
             .findByIdAndResumeUserEmail(experienceId, email)
-            .orElseThrow(() -> new RuntimeException("Acesso Negado ou Experiencia não encontrada"));
+            .orElseThrow(() -> new ResourceNotFoundException("Experiencia"));
 
         experience.setCompany(dto.company());
         experience.setPosition(dto.position());
@@ -100,7 +101,7 @@ public class ExperienceService {
 
         Experience experience = experienceRepository
             .findByIdAndResumeUserEmail(experienceId, email)
-            .orElseThrow(() -> new RuntimeException("Acesso Negado ou Experiencia não encontrada"));
+            .orElseThrow(() -> new ResourceNotFoundException("Experiencia"));
 
         experienceRepository.delete(experience);
     }

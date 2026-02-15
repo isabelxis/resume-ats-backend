@@ -1,4 +1,4 @@
-package br.com.isabelxis.resume_ats_backend.infra.exception;
+package br.com.isabelxis.resume_ats_backend.infra.exception.auth;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException() {

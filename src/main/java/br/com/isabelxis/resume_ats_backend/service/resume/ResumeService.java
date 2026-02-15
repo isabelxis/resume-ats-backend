@@ -13,6 +13,7 @@ import br.com.isabelxis.resume_ats_backend.dto.user.ProfileDTO;
 import br.com.isabelxis.resume_ats_backend.entity.resume.Experience;
 import br.com.isabelxis.resume_ats_backend.entity.resume.Resume;
 import br.com.isabelxis.resume_ats_backend.entity.user.User;
+import br.com.isabelxis.resume_ats_backend.infra.exception.resume.ResourceNotFoundException;
 import br.com.isabelxis.resume_ats_backend.repository.resume.ExperienceRepository;
 import br.com.isabelxis.resume_ats_backend.repository.resume.ResumeRepository;
 import br.com.isabelxis.resume_ats_backend.repository.user.UserRepository;
@@ -61,7 +62,7 @@ public class ResumeService {
     public FullResumeDTO getById(Long id, String email) {
         Resume resume = resumeRepository
             .findByIdAndUserEmail(id, email)
-            .orElseThrow(() -> new RuntimeException("Curriculo não encontrado ou acesso negado"));
+            .orElseThrow(() -> new ResourceNotFoundException("Curriculo"));
 
         ProfileDTO profileDTO = new ProfileDTO(
             resume.getUser().getId(),
@@ -93,7 +94,7 @@ public class ResumeService {
 
         Resume resume = resumeRepository
             .findByIdAndUserEmail(id, email)
-            .orElseThrow(() -> new RuntimeException("Curriculo não encontrado ou acesso negado"));
+            .orElseThrow(() -> new ResourceNotFoundException("Curriculo"));
 
 
         resume.setTitle(dto.title());
@@ -106,7 +107,7 @@ public class ResumeService {
     public void delete(Long id, String email) {
         Resume resume = resumeRepository
             .findByIdAndUserEmail(id, email)
-            .orElseThrow(() -> new RuntimeException("Curriculo não encontrado ou acesso negado"));
+            .orElseThrow(() -> new ResourceNotFoundException("Curriculo"));
 
         resumeRepository.delete(resume);
     }

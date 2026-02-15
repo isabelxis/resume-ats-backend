@@ -11,6 +11,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import br.com.isabelxis.resume_ats_backend.infra.exception.auth.EmailAlreadyExistsException;
+import br.com.isabelxis.resume_ats_backend.infra.exception.auth.InvalidPasswordException;
+import br.com.isabelxis.resume_ats_backend.infra.exception.auth.InvalidResetTokenException;
+import br.com.isabelxis.resume_ats_backend.infra.exception.auth.UserNotFoundException;
+import br.com.isabelxis.resume_ats_backend.infra.exception.resume.ResourceNotFoundException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -85,5 +91,15 @@ public class GlobalExceptionHandler {
             "status", 400,
             "message", ex.getMessage()
         ));
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNotFound(ResourceNotFoundException ex) {
+        
+        Map<String, Object> body = new HashMap<>();
+        body.put("status", 404);
+        body.put("message", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 }
