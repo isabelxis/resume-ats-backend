@@ -1,0 +1,10 @@
+package br.com.isabelxis.resume_ats_backend.dto.resume;
+
+public record UpdateEducationDTO(
+    String institution,
+    String degree,
+    String startDate,
+    String endDate,
+    String GPA,
+    String skills
+) {}
