@@ -130,6 +130,7 @@ PUT http://localhost:8080/api/resumes/{id}/educations/{id_education}
 DELETE http://localhost:8080/api/resumes/{id}/educations/{id_educations}
 
 - CRUD Projeto
+
 - CRUD Skill
 
 3. Seleção de template ATS

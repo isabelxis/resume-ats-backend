@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.isabelxis.resume_ats_backend.dto.user.AuthResponseDTO;
-import br.com.isabelxis.resume_ats_backend.dto.user.ForgotPasswordRequestDTO;
-import br.com.isabelxis.resume_ats_backend.dto.user.LoginRequestDTO;
-import br.com.isabelxis.resume_ats_backend.dto.user.RegisterRequestDTO;
-import br.com.isabelxis.resume_ats_backend.dto.user.ResetPasswordRequestDTO;
+import br.com.isabelxis.resume_ats_backend.dto.auth.AuthResponseDTO;
+import br.com.isabelxis.resume_ats_backend.dto.auth.ForgotPasswordRequestDTO;
+import br.com.isabelxis.resume_ats_backend.dto.auth.LoginRequestDTO;
+import br.com.isabelxis.resume_ats_backend.dto.auth.RegisterRequestDTO;
+import br.com.isabelxis.resume_ats_backend.dto.auth.ResetPasswordRequestDTO;
 import br.com.isabelxis.resume_ats_backend.service.auth.AuthService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

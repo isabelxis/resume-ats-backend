@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import br.com.isabelxis.resume_ats_backend.entity.auth.Plan;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -33,23 +34,28 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = true)
-    private String name;
-
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private String name;
+
+    private String phone;
+
+    private String location;
+
+    private String linkedin;
+
+    private String github;
+
+    private String portfolio;
+
+    private String headline;
 
     @Enumerated(EnumType.STRING)
     private Plan plan = Plan.FREE;
 
     private LocalDateTime createdAt = LocalDateTime.now();
-
-    private String phone;
-    private String linkedin;
-    private String github;
-    private String portfolio;
-
-
 
     @Override
     public String getUsername() {

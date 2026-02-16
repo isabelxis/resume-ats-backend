@@ -1,4 +1,4 @@
-package br.com.isabelxis.resume_ats_backend.controller.resume;
+package br.com.isabelxis.resume_ats_backend.controller.user;
 
 import java.util.List;
 
@@ -13,75 +13,64 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.isabelxis.resume_ats_backend.dto.resume.CreateResumeDTO;
-import br.com.isabelxis.resume_ats_backend.dto.resume.ListResumeDTO;
-import br.com.isabelxis.resume_ats_backend.dto.resume.UpdateResumeDTO;
-import br.com.isabelxis.resume_ats_backend.service.resume.ResumeService;
-
+import br.com.isabelxis.resume_ats_backend.dto.user.education.CreateEducationDTO;
+import br.com.isabelxis.resume_ats_backend.dto.user.education.ListEducationDTO;
+import br.com.isabelxis.resume_ats_backend.dto.user.education.UpdateEducationDTO;
+import br.com.isabelxis.resume_ats_backend.service.user.EducationService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/resumes")
+@RequestMapping("/api/educations")
 @RequiredArgsConstructor
-public class ResumeController {
+public class EducationController {
 
-    private final ResumeService resumeService;
+    private final EducationService educationService;
 
     @PostMapping
-    public ResponseEntity<ListResumeDTO> create( 
+    public ResponseEntity<ListEducationDTO> create(
+
         @RequestBody
-        CreateResumeDTO dto,
+        CreateEducationDTO dto,
+
         Authentication auth
     ) {
         return ResponseEntity.ok(
-                resumeService.create(auth.getName(), dto)
-            );
+            educationService.create(dto, auth.getName())
+        );
     }
 
     @GetMapping
-    public ResponseEntity<List<ListResumeDTO>> list(Authentication auth) {
-        return ResponseEntity.ok(
-                resumeService.list(auth.getName())
-            );
-    }
-
-    /*@GetMapping("/{id}")
-    public ResponseEntity<FullResumeDTO> get(
-        @PathVariable
-        Long id,
-
+    public ResponseEntity<List<ListEducationDTO>> list(
         Authentication auth
     ) {
         return ResponseEntity.ok(
-                resumeService.getById(id, auth.getName())
-            );
-    }*/
+            educationService.list(auth.getName())
+        );
+    }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ListResumeDTO> update( 
+    public ResponseEntity<ListEducationDTO> update(
         @PathVariable
         Long id,
 
         @RequestBody
-        UpdateResumeDTO dto, 
+        UpdateEducationDTO dto,
         
         Authentication auth
-
     ) {
         return ResponseEntity.ok(
-                resumeService.update(id, dto, auth.getName())
-            );
-    }
-
+            educationService.update(id, dto, auth.getName())
+        );
+    }  
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
         @PathVariable
         Long id,
-
         Authentication auth
     ) {
-        resumeService.delete(id, auth.getName());
+        educationService.delete(id, auth.getName());
         return ResponseEntity.noContent().build();
-    }
+    }   
     
 }

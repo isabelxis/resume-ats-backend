@@ -1,10 +1,12 @@
 package br.com.isabelxis.resume_ats_backend.service.user;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.method.annotation.RequestParamMethodArgumentResolver;
 
 import br.com.isabelxis.resume_ats_backend.dto.user.ProfileDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.UpdateProfileRequestDTO;
 import br.com.isabelxis.resume_ats_backend.entity.user.User;
+import br.com.isabelxis.resume_ats_backend.infra.exception.resume.ResourceNotFoundException;
 import br.com.isabelxis.resume_ats_backend.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -36,9 +38,10 @@ public class UserService{
         return mapToDTO(updatedUser);
     }
 
-    public User getProfile(String email){
-        return userRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    public ProfileDTO getProfile(String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário"));
+        return mapToDTO(user);
     }
 
     private ProfileDTO mapToDTO(User user) {

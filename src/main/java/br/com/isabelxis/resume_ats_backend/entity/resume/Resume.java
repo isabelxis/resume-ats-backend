@@ -3,8 +3,11 @@ package br.com.isabelxis.resume_ats_backend.entity.resume;
 import java.time.LocalDate;
 import java.util.List;
 
+import br.com.isabelxis.resume_ats_backend.entity.user.Education;
+import br.com.isabelxis.resume_ats_backend.entity.user.Experience;
+import br.com.isabelxis.resume_ats_backend.entity.user.Project;
+import br.com.isabelxis.resume_ats_backend.entity.user.Skill;
 import br.com.isabelxis.resume_ats_backend.entity.user.User;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,9 +54,9 @@ public class Resume {
     private List<Education> educations;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Projects> projects;
+    private List<Project> projects;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Skills> skills;
+    private List<Skill> skills;
     
 }

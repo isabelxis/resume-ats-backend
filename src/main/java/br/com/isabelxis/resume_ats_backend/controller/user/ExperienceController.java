@@ -1,4 +1,4 @@
-package br.com.isabelxis.resume_ats_backend.controller.resume;
+package br.com.isabelxis.resume_ats_backend.controller.user;
 
 import java.util.List;
 
@@ -13,64 +13,54 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.isabelxis.resume_ats_backend.dto.resume.CreateResumeDTO;
-import br.com.isabelxis.resume_ats_backend.dto.resume.ListResumeDTO;
-import br.com.isabelxis.resume_ats_backend.dto.resume.UpdateResumeDTO;
-import br.com.isabelxis.resume_ats_backend.service.resume.ResumeService;
-
+import br.com.isabelxis.resume_ats_backend.dto.user.experience.CreateExperienceDTO;
+import br.com.isabelxis.resume_ats_backend.dto.user.experience.ListExperienceDTO;
+import br.com.isabelxis.resume_ats_backend.dto.user.experience.UpdateExperienceDTO;
+import br.com.isabelxis.resume_ats_backend.service.user.ExperienceService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/resumes")
+@RequestMapping("/api/experiences")
 @RequiredArgsConstructor
-public class ResumeController {
+public class ExperienceController {
 
-    private final ResumeService resumeService;
+    private final ExperienceService experienceService;
 
     @PostMapping
-    public ResponseEntity<ListResumeDTO> create( 
-        @RequestBody
-        CreateResumeDTO dto,
-        Authentication auth
-    ) {
-        return ResponseEntity.ok(
-                resumeService.create(auth.getName(), dto)
-            );
-    }
-
-    @GetMapping
-    public ResponseEntity<List<ListResumeDTO>> list(Authentication auth) {
-        return ResponseEntity.ok(
-                resumeService.list(auth.getName())
-            );
-    }
-
-    /*@GetMapping("/{id}")
-    public ResponseEntity<FullResumeDTO> get(
-        @PathVariable
-        Long id,
-
-        Authentication auth
-    ) {
-        return ResponseEntity.ok(
-                resumeService.getById(id, auth.getName())
-            );
-    }*/
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ListResumeDTO> update( 
-        @PathVariable
-        Long id,
+    public ResponseEntity<ListExperienceDTO> create(
 
         @RequestBody
-        UpdateResumeDTO dto, 
+        CreateExperienceDTO dto,
         
         Authentication auth
-
     ) {
         return ResponseEntity.ok(
-                resumeService.update(id, dto, auth.getName())
-            );
+            experienceService.create(dto, auth.getName())
+        );
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<ListExperienceDTO>> list(
+        Authentication auth
+    ) {
+        return ResponseEntity.ok(
+            experienceService.list(auth.getName())
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ListExperienceDTO> update(
+        @PathVariable
+        Long id,
+
+        @RequestBody
+        UpdateExperienceDTO dto,
+        
+        Authentication auth
+    ) {
+        return ResponseEntity.ok(
+            experienceService.update(id, dto, auth.getName()) 
+        );
     }
 
     @DeleteMapping("/{id}")
@@ -80,7 +70,7 @@ public class ResumeController {
 
         Authentication auth
     ) {
-        resumeService.delete(id, auth.getName());
+        experienceService.delete(id, auth.getName());
         return ResponseEntity.noContent().build();
     }
     
