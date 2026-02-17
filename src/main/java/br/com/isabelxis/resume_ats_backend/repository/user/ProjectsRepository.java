@@ -9,7 +9,7 @@ import br.com.isabelxis.resume_ats_backend.entity.user.Project;
 
 public interface ProjectsRepository extends JpaRepository<Project, Long> {  
     Optional<Project> findByIdAndUserEmail(Long id,String email); 
-    List<Project> findByIdList(Long id); 
+    List<Project> findByIdIn(List<Long> id);  
     List<Project> findByUserEmail(String email);
 
 }

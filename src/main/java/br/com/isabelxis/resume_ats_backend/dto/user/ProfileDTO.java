@@ -1,11 +1,12 @@
 package br.com.isabelxis.resume_ats_backend.dto.user;
 
 public record ProfileDTO(
-        Long id,
         String name,
         String email,
         String phone,
+        String location,
         String linkedin,
         String github,
-        String portfolio
+        String portfolio,
+        String headline
 ) {}

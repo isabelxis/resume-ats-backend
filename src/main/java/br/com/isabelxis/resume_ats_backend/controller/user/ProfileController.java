@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.isabelxis.resume_ats_backend.dto.user.ProfileDTO;
-import br.com.isabelxis.resume_ats_backend.dto.user.UpdateProfileRequestDTO;
+import br.com.isabelxis.resume_ats_backend.dto.user.UpdateProfileDTO;
 import br.com.isabelxis.resume_ats_backend.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +21,7 @@ public class ProfileController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<ProfileDTO> getCurrentUser(
+    public ResponseEntity<ProfileDTO> getProfile(
             Authentication auth
         ) {
         return ResponseEntity.ok(
@@ -29,15 +29,15 @@ public class ProfileController {
         );
     }
 
-    @PutMapping("/me")
+    @PutMapping
     public ResponseEntity<ProfileDTO> updateProfile(
-        @RequestBody UpdateProfileRequestDTO dto,
+        @RequestBody UpdateProfileDTO dto,
         Authentication authentication){
         
         String email = authentication.getName();
 
         return ResponseEntity.ok(
-            userService.updateProfile(email, dto, dto.name())
+            userService.updateProfile(email, dto)
         );
 
         }

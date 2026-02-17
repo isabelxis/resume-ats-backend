@@ -9,7 +9,7 @@ import br.com.isabelxis.resume_ats_backend.entity.user.Education;
 
 public interface EducationRepository extends JpaRepository<Education, Long> {
     Optional<Education> findByIdAndUserEmail(Long id,String email); 
-    List<Education> findByIdList(Long id); 
+    List<Education> findByIdIn(List<Long> id); 
     List<Education> findByUserEmail(String email);
         
 }

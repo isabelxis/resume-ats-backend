@@ -9,7 +9,7 @@ import br.com.isabelxis.resume_ats_backend.entity.user.Experience;
 
 public interface ExperienceRepository extends JpaRepository<Experience, Long> {
     Optional<Experience> findByIdAndUserEmail(Long id,String email); 
-    List<Experience> findByIdList(Long id); 
+    List<Experience> findByIdIn(List<Long> id); 
     List<Experience> findByUserEmail(String email);
 
 }
