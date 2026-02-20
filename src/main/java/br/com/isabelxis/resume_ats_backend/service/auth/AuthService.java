@@ -3,6 +3,7 @@ package br.com.isabelxis.resume_ats_backend.service.auth;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,13 +45,17 @@ public class AuthService {
         user.setPlan(Plan.FREE);
         userRepository.save(user);
 
-        String token = jwtService.generateToken(user);
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
         return new AuthResponseDTO(
-            token,
+            accessToken,
+            refreshToken,
             new UserResponseDTO(user.getId(), user.getEmail(), user.getPlan().name()));
     }
 
     public AuthResponseDTO login(LoginRequestDTO request) {
+
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(UserNotFoundException::new);
 
@@ -58,10 +63,13 @@ public class AuthService {
             throw new InvalidPasswordException();
         }
 
-        String token = jwtService.generateToken(user);
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
 
         return new AuthResponseDTO(
-            token,
+            accessToken,
+            refreshToken,
             new UserResponseDTO(
                 user.getId(),
                 user.getEmail(),
@@ -104,5 +112,11 @@ public class AuthService {
 
         resetToken.setUsed(true);
         tokenRepository.save(resetToken);
+    }
+
+    public User findByEmail(String email){
+        return userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("Usuário")
+            );
     }
 }

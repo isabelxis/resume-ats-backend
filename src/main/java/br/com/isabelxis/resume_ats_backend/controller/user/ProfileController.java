@@ -20,7 +20,7 @@ public class ProfileController {
     
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping("/me")
     public ResponseEntity<ProfileDTO> getProfile(
             Authentication auth
         ) {
@@ -29,7 +29,7 @@ public class ProfileController {
         );
     }
 
-    @PutMapping
+    @PutMapping("/me")
     public ResponseEntity<ProfileDTO> updateProfile(
         @RequestBody UpdateProfileDTO dto,
         Authentication authentication){

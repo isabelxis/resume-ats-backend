@@ -32,7 +32,7 @@ public class JwtAutenticationFilter extends OncePerRequestFilter {
         )throws ServletException, IOException {
 
             final String authHeader = request.getHeader("Authorization");
-
+            
             // Verifica se o header de autorização está presente e começa com "Bearer " (que é o formato comum para tokens JWT)
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 filterChain.doFilter(request, response);
@@ -40,7 +40,7 @@ public class JwtAutenticationFilter extends OncePerRequestFilter {
             }
 
             final String token = authHeader.substring(7); // Remove "Bearer
-            String email;
+                        String email;
 
             try {
                 email = jwtService.extractEmail(token);
@@ -55,7 +55,7 @@ public class JwtAutenticationFilter extends OncePerRequestFilter {
                 
                 User user = userRepository.findByEmail(email).orElse(null);
 
-                if (user != null && jwtService.isTokenValid(token, user)) {
+                if (user != null && jwtService.isAccessTokenValid(token, user)) {
 
                     UsernamePasswordAuthenticationToken authToken = 
                         new UsernamePasswordAuthenticationToken(
@@ -73,9 +73,12 @@ public class JwtAutenticationFilter extends OncePerRequestFilter {
                         .setAuthentication(authToken);
                 }
             }
-
-
-        filterChain.doFilter(request, response);
+        
+        String type = jwtService.extractTokenType(token);
+        if(!"access".equals(type)){
+            filterChain.doFilter(request, response);
+            return;
+        }
     }
 
     
