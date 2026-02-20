@@ -35,7 +35,7 @@
     }
     ````
  - Alteração de profile ✔
-  - PUT http://localhost:8080/api/users/me
+  - PUT http://localhost:8080/api/profile/me
     ````
     {
       "email": "teste@gmail.com",
