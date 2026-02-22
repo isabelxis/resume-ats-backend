@@ -26,13 +26,12 @@ public class UserService{
             .orElseThrow(() -> new RuntimeException("Usuário"));
 
         if (dto.name() != null) user.setName(dto.name());
-        if (dto.name() != null) user.setEmail(dto.email());
-        if (dto.name() != null) user.setPhone(dto.phone());
-        if (dto.name() != null) user.setLocation(dto.location());
-        if (dto.name() != null) user.setLinkedin(dto.linkedin()); 
-        if (dto.name() != null) user.setGithub(dto.github());
-        if (dto.name() != null) user.setPortfolio(dto.portfolio());
-        if (dto.name() != null) user.setHeadline(dto.headline());
+        if (dto.phone() != null) user.setPhone(dto.phone());
+        if (dto.location() != null) user.setLocation(dto.location());
+        if (dto.linkedin() != null) user.setLinkedin(dto.linkedin()); 
+        if (dto.github() != null) user.setGithub(dto.github());
+        if (dto.portfolio() != null) user.setPortfolio(dto.portfolio());
+        if (dto.headline() != null) user.setHeadline(dto.headline());
         
         User updatedUser = userRepository.save(user);
 
@@ -47,8 +46,10 @@ public class UserService{
 
     private ProfileDTO mapToDTO(User user) {
         return new ProfileDTO(
+            user.getId(),
             user.getName(),
             user.getEmail(),
+            user.getPlan().name(),
             user.getPhone(),
             user.getLocation(),
             user.getLinkedin(),

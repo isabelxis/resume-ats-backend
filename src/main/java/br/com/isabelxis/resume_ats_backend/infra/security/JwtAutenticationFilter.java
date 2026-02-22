@@ -26,61 +26,61 @@ public class JwtAutenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request, 
-            HttpServletResponse response, 
+            HttpServletRequest request,
+            HttpServletResponse response,
             FilterChain filterChain
-        )throws ServletException, IOException {
+        ) throws ServletException, IOException {
 
-            final String authHeader = request.getHeader("Authorization");
-            
-            // Verifica se o header de autorização está presente e começa com "Bearer " (que é o formato comum para tokens JWT)
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                filterChain.doFilter(request, response);
-                return;
-            }
+        final String authHeader = request.getHeader("Authorization");
 
-            final String token = authHeader.substring(7); // Remove "Bearer
-                        String email;
-
-            try {
-                email = jwtService.extractEmail(token);
-            } catch (Exception e) {
-                // Token inválido ou expirado
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            if (email != null && 
-                SecurityContextHolder.getContext().getAuthentication() == null) {
-                
-                User user = userRepository.findByEmail(email).orElse(null);
-
-                if (user != null && jwtService.isAccessTokenValid(token, user)) {
-
-                    UsernamePasswordAuthenticationToken authToken = 
-                        new UsernamePasswordAuthenticationToken(
-                        user, 
-                        null,
-                        user.getAuthorities()
-                    );
-
-                    authToken.setDetails( 
-                        new WebAuthenticationDetailsSource()
-                            .buildDetails(request)
-                    );
-
-                    SecurityContextHolder.getContext()
-                        .setAuthentication(authToken);
-                }
-            }
-        
-        String type = jwtService.extractTokenType(token);
-        if(!"access".equals(type)){
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-    }
 
-    
-    
+        String token = authHeader.substring(7).trim();
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7).trim();
+        }
+
+        if (token.isEmpty()) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        try {
+            String type = jwtService.extractTokenType(token);
+            if (!"access".equals(type)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            String email = jwtService.extractEmail(token);
+
+            if (email != null &&
+                SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                User user = userRepository.findByEmail(email).orElse(null);
+
+                if (user != null && jwtService.isAccessTokenValid(token, user)) {
+                    UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                            user,
+                            null,
+                            user.getAuthorities()
+                        );
+
+                    authToken.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }
+        } catch (Exception e) {
+            SecurityContextHolder.clearContext();
+        }
+
+        filterChain.doFilter(request, response);
+    }
 }

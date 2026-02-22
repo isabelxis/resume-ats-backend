@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.isabelxis.resume_ats_backend.dto.user.ProfileDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.UpdateProfileDTO;
 import br.com.isabelxis.resume_ats_backend.service.user.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class ProfileController {
     
     private final UserService userService;
+
 
     @GetMapping("/me")
     public ResponseEntity<ProfileDTO> getProfile(
@@ -31,7 +33,7 @@ public class ProfileController {
 
     @PutMapping("/me")
     public ResponseEntity<ProfileDTO> updateProfile(
-        @RequestBody UpdateProfileDTO dto,
+        @Valid @RequestBody UpdateProfileDTO dto,
         Authentication authentication){
         
         String email = authentication.getName();

@@ -32,7 +32,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final JwtService jwtService;
-
+    
     @PostMapping("/register")
     public AuthResponseDTO register(@Valid @RequestBody RegisterRequestDTO request) {
         return authService.register(request);
@@ -113,6 +113,21 @@ public class AuthController {
         );
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+
+        ResponseCookie cookie = ResponseCookie
+                .from("refreshToken", "")
+                .httpOnly(true)
+                .secure(false) // true em produção
+                .path("/")
+                .maxAge(0) // 🔥 isso remove o cookie
+                .build();
+
+        response.addHeader("Set-Cookie", cookie.toString());
+
+        return ResponseEntity.ok().build();
+    }
     //extrair cookie
     private String extractRefreshTokenFromCookie(HttpServletRequest request) {
 
