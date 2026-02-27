@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
 import lombok.Getter;
@@ -47,7 +49,9 @@ public class Experience {
 
     private String location;
 
-    private String models; //REMOTE, HYBRID, ONSITE
+    @Enumerated(EnumType.STRING)
+    @Column(name = "models", nullable = false)
+    private ExperienceModel model;
 
     private String employmentType; //FULL_TIME, PART_TIME, CONTRACT, TEMPORARY, INTERN, VOLUNTEER, PER_DIEM, OTHER
 

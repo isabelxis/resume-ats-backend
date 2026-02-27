@@ -99,7 +99,7 @@ public class ResumeService {
             e.getStartDate(),
             e.getEndDate(),
             e.getSkills(),
-            e.getModels(),
+            e.getModel(),
             e.getCurrent(),
             e.getLocation(),
             e.getEmploymentType()

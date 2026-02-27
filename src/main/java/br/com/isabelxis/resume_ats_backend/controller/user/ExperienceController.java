@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.isabelxis.resume_ats_backend.dto.user.experience.CreateExperienceDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.experience.ListExperienceDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.experience.UpdateExperienceDTO;
+import br.com.isabelxis.resume_ats_backend.entity.user.ExperienceModel;
 import br.com.isabelxis.resume_ats_backend.service.user.ExperienceService;
 import lombok.RequiredArgsConstructor;
 
@@ -46,6 +47,11 @@ public class ExperienceController {
         return ResponseEntity.ok(
             experienceService.list(auth.getName())
         );
+    }
+
+    @GetMapping("/models")
+    public ResponseEntity<List<ExperienceModel>> listModels() {
+        return ResponseEntity.ok(experienceService.listModels());
     }
 
     @PutMapping("/{id}")

@@ -1,5 +1,6 @@
 package br.com.isabelxis.resume_ats_backend.service.user;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import br.com.isabelxis.resume_ats_backend.dto.user.experience.CreateExperienceD
 import br.com.isabelxis.resume_ats_backend.dto.user.experience.ListExperienceDTO;
 import br.com.isabelxis.resume_ats_backend.dto.user.experience.UpdateExperienceDTO;
 import br.com.isabelxis.resume_ats_backend.entity.user.Experience;
+import br.com.isabelxis.resume_ats_backend.entity.user.ExperienceModel;
 import br.com.isabelxis.resume_ats_backend.entity.user.User;
 import br.com.isabelxis.resume_ats_backend.infra.exception.resume.ResourceNotFoundException;
 import br.com.isabelxis.resume_ats_backend.repository.user.ExperienceRepository;
@@ -38,7 +40,7 @@ public class ExperienceService {
         experience.setStartDate(dto.startDate());
         experience.setEndDate(dto.endDate());
         experience.setSkills(dto.skills());
-        experience.setModels(dto.models());
+        experience.setModel(dto.models());
         experience.setCurrent(dto.current());
         experience.setLocation(dto.location());
         experience.setEmploymentType(dto.employmentType());
@@ -62,7 +64,7 @@ public class ExperienceService {
                 e.getStartDate(),
                 e.getEndDate(),
                 e.getSkills(),
-                e.getModels(),
+                e.getModel(),
                 e.getCurrent(),
                 e.getLocation(),
                 e.getEmploymentType()
@@ -86,7 +88,7 @@ public class ExperienceService {
         if (dto.startDate() != null) experience.setStartDate(dto.startDate());
         experience.setEndDate(dto.endDate());
         if (dto.skills() != null) experience.setSkills(dto.skills());
-        if (dto.models() != null) experience.setModels(dto.models());
+        if (dto.models() != null) experience.setModel(dto.models());
         experience.setCurrent(dto.current());
         if (dto.location() != null) experience.setLocation(dto.location());
         if (dto.employmentType() != null) experience.setEmploymentType(dto.employmentType());
@@ -104,6 +106,10 @@ public class ExperienceService {
 
         experienceRepository.delete(experience);
     }
+
+    public List<ExperienceModel> listModels() {
+        return Arrays.stream(ExperienceModel.values()).toList();
+    }
     
     private ListExperienceDTO mapToDTO(Experience e) {
         return new ListExperienceDTO(
@@ -114,7 +120,7 @@ public class ExperienceService {
             e.getStartDate(),
             e.getEndDate(),
             e.getSkills(),
-            e.getModels(),
+            e.getModel(),
             e.getCurrent(),
             e.getLocation(),
             e.getEmploymentType()

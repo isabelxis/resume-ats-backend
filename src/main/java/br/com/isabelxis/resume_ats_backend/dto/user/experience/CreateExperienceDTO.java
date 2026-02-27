@@ -2,6 +2,8 @@ package br.com.isabelxis.resume_ats_backend.dto.user.experience;
 
 import java.time.LocalDate;
 
+import br.com.isabelxis.resume_ats_backend.entity.user.ExperienceModel;
+
 public record CreateExperienceDTO(
     String company,
     String position,
@@ -9,7 +11,7 @@ public record CreateExperienceDTO(
     LocalDate startDate,
     LocalDate endDate,
     String skills,
-    String models,
+    ExperienceModel models,
     Boolean current,
     String location,
     String employmentType
